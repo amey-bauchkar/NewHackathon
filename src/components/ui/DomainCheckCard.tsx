@@ -44,27 +44,27 @@ interface DomainCheckCardProps {
 
 const verdictConfig = {
   legit: {
-    icon: "✅",
-    label: "Legit",
+    icon: "[ PASS ]",
+    label: "LEGIT",
     bg: "bg-emerald-50",
     border: "border-emerald-200",
-    badge: "bg-emerald-100 text-emerald-700",
+    badge: "text-emerald-800 font-bold tracking-widest",
     barColor: "bg-emerald-500",
   },
   suspicious: {
-    icon: "⚠️",
-    label: "Suspicious",
+    icon: "[ WARN ]",
+    label: "SUSPICIOUS",
     bg: "bg-amber-50",
     border: "border-amber-200",
-    badge: "bg-amber-100 text-amber-700",
+    badge: "text-amber-800 font-bold tracking-widest",
     barColor: "bg-amber-500",
   },
   "likely-fake": {
-    icon: "🚨",
-    label: "Likely Fake",
+    icon: "[ FAIL ]",
+    label: "LIKELY FAKE",
     bg: "bg-red-50",
     border: "border-red-200",
-    badge: "bg-red-100 text-red-700",
+    badge: "text-red-800 font-bold tracking-widest",
     barColor: "bg-red-500",
   },
 };
@@ -119,19 +119,16 @@ export default function DomainCheckCard({ originalText }: DomainCheckCardProps) 
   if (noEmail) {
     return (
       <div className="rounded-xl border border-red-200 bg-red-50 p-6 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🌐</span>
-            <h3 className="text-lg font-semibold text-foreground">
-              Domain Legitimacy Check
-            </h3>
-          </div>
-          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-red-100 text-red-700">
-            🚨 No Email Found
+        <div className="flex items-center justify-between border-b border-red-200 pb-3 mb-3">
+          <h3 className="text-lg font-bold text-foreground uppercase tracking-wide">
+            Domain Legitimacy Check
+          </h3>
+          <span className="text-sm font-bold text-red-700 tracking-wider">
+            [ NO EMAIL FOUND ]
           </span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="mt-0.5 text-sm">❌</span>
+          <span className="text-red-600 font-bold shrink-0 mt-0.5">✕</span>
           <p className="text-sm text-foreground leading-relaxed">
             <strong>No official email address was found in this offer.</strong> Legitimate companies always provide a corporate email (e.g. hr@company.com) in their offer communications. The absence of any email contact — especially when using WhatsApp or UPI only — is a significant red flag indicating this could be a scam.
           </p>
@@ -157,7 +154,7 @@ export default function DomainCheckCard({ originalText }: DomainCheckCardProps) 
     return (
       <div className="rounded-xl border border-amber-200 bg-amber-50 p-6">
         <div className="flex items-center gap-2">
-          <span className="text-lg">⚠️</span>
+          <span className="text-amber-600 font-bold">!</span>
           <p className="text-sm text-foreground">
             Domain check unavailable: {error}
           </p>
@@ -214,14 +211,11 @@ export default function DomainCheckCard({ originalText }: DomainCheckCardProps) 
   return (
     <div className={`rounded-xl border ${config.border} ${config.bg} p-6 space-y-5`}>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">🌐</span>
-          <h3 className="text-lg font-semibold text-foreground">
-            Domain Legitimacy Check
-          </h3>
-        </div>
-        <span className={`text-xs font-semibold px-3 py-1 rounded-full ${config.badge}`}>
+      <div className="flex items-center justify-between border-b border-border pb-3">
+        <h3 className="text-lg font-bold text-foreground uppercase tracking-wide">
+          Domain Legitimacy Check
+        </h3>
+        <span className={`text-sm ${config.badge}`}>
           {config.icon} {config.label}
         </span>
       </div>
@@ -248,8 +242,8 @@ export default function DomainCheckCard({ originalText }: DomainCheckCardProps) 
       <div className="space-y-2">
         {checks.map((check, i) => (
           <div key={i} className="flex items-start gap-2">
-            <span className="mt-0.5 text-sm">
-              {check.passed ? "✅" : "❌"}
+            <span className={`mt-0.5 shrink-0 font-bold ${check.passed ? 'text-emerald-600' : 'text-red-600'}`}>
+              {check.passed ? "✓" : "✕"}
             </span>
             <div>
               <span className="text-sm font-semibold text-foreground">{check.label}: </span>

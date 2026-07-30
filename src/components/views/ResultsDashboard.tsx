@@ -9,6 +9,7 @@ import XRayTextView from "@/components/views/XRayTextView";
 import ComplaintDraftCard from "@/components/ui/ComplaintDraftCard";
 import PlacementCellBar from "@/components/ui/PlacementCellBar";
 import DomainCheckCard from "@/components/ui/DomainCheckCard";
+import CollapsibleSection from "@/components/ui/CollapsibleSection";
 
 interface ResultsDashboardProps {
   result: AnalysisResult;
@@ -17,7 +18,7 @@ interface ResultsDashboardProps {
 
 export default function ResultsDashboard({ result, originalText }: ResultsDashboardProps) {
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500">
       {/* Summary Bar */}
       <div className="rounded-xl border border-border bg-card p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -27,35 +28,40 @@ export default function ResultsDashboard({ result, originalText }: ResultsDashbo
         <Badge level={result.riskLevel} />
       </div>
 
-      {/* Gauge + X-Ray View */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 flex justify-center">
-          <div className="rounded-xl border border-border bg-card p-6 w-full flex items-center justify-center">
-            <RiskGauge score={result.riskScore} level={result.riskLevel} />
-          </div>
+      {/* Risk Gauge (Standalone at top) */}
+      <div className="flex justify-center">
+        <div className="rounded-xl border border-border bg-card p-6 w-full flex items-center justify-center lg:w-1/3">
+          <RiskGauge score={result.riskScore} level={result.riskLevel} />
         </div>
-        <div className="lg:col-span-2">
+      </div>
+
+      <div className="space-y-4">
+        {/* X-Ray Analysis Dropdown */}
+        <CollapsibleSection title="X-Ray Analysis" defaultOpen={false}>
           <XRayTextView originalText={originalText} highlights={result.highlights || []} />
-        </div>
+        </CollapsibleSection>
+
+        {/* Fraud Indicators Dropdown */}
+        <CollapsibleSection title="Fraud Indicators" defaultOpen={false}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {(result.indicators || []).map((indicator, index) => (
+              <FraudIndicatorCard key={index} indicator={indicator} />
+            ))}
+          </div>
+        </CollapsibleSection>
+
+        {/* Domain Legitimacy Check Dropdown */}
+        <CollapsibleSection title="Domain Legitimacy Check" defaultOpen={false}>
+          <DomainCheckCard originalText={originalText} />
+        </CollapsibleSection>
+
+        {/* Verification Steps Dropdown */}
+        <CollapsibleSection title="Verification Steps" defaultOpen={false}>
+          <VerificationChecklist steps={result.verificationSteps || []} />
+        </CollapsibleSection>
       </div>
 
-      {/* Fraud Indicators */}
-      <div>
-        <h3 className="text-lg font-semibold text-foreground mb-4">🚩 Fraud Indicators</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {(result.indicators || []).map((indicator, index) => (
-            <FraudIndicatorCard key={index} indicator={indicator} />
-          ))}
-        </div>
-      </div>
-
-      {/* Domain Legitimacy Check */}
-      <DomainCheckCard originalText={originalText} />
-
-      {/* Verification Steps */}
-      <VerificationChecklist steps={result.verificationSteps || []} />
-
-      {/* Cybercrime Complaint Draft — only for high-risk */}
+      {/* Cybercrime Complaint Draft — Always visible, only for high-risk */}
       {result.riskLevel === "high-risk" && result.complaintDraft && result.extractedEntities && (
         <ComplaintDraftCard
           companyName={result.extractedEntities.companyName}
@@ -66,7 +72,7 @@ export default function ResultsDashboard({ result, originalText }: ResultsDashbo
         />
       )}
 
-      {/* Placement Cell Contact — always shown regardless of risk level */}
+      {/* Placement Cell Contact — Always visible */}
       <PlacementCellBar />
     </div>
   );

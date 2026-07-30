@@ -4,9 +4,9 @@ import { useState } from "react";
 
 interface ComplaintDraftCardProps {
   companyName: string;
-  contactEmail: string;
-  contactPhone: string;
-  amountRequested: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  amountRequested?: string;
   complaintDraft: string;
 }
 
@@ -47,12 +47,11 @@ export default function ComplaintDraftCard({
   return (
     <div className="rounded-xl border border-red-200 bg-red-50 p-6 space-y-5">
       {/* Header */}
-      <div className="flex items-center gap-2">
-        <span className="text-xl">🚨</span>
-        <h3 className="text-lg font-semibold text-foreground">
+      <div className="flex items-center gap-2 border-b border-red-200 pb-3">
+        <h3 className="text-lg font-bold text-red-800 uppercase tracking-wide">
           Cybercrime Complaint Draft
         </h3>
-        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700">
+        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700 ml-auto">
           Action Required
         </span>
       </div>

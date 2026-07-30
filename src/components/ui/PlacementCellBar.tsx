@@ -2,22 +2,11 @@
 
 import { placementCellContact } from "@/lib/placementCellConfig";
 
-/**
- * A compact horizontal bar showing the student's own college placement
- * cell contact details. Renders at the bottom of every analysis result
- * (safe, suspicious, and high-risk) so students always know who to
- * reach out to for help verifying an offer.
- *
- * Uses the app's neutral/informational color tokens (border-border,
- * bg-card, text-foreground, text-muted) — intentionally calm and
- * institutional, NOT red/alarming.
- */
 export default function PlacementCellBar() {
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-lg">🏫</span>
-        <h4 className="text-sm font-semibold text-foreground">
+    <div className="rounded-xl border border-border bg-card p-6 border-l-4 border-l-slate-400">
+      <div className="mb-4">
+        <h4 className="text-sm font-bold text-foreground uppercase tracking-wide">
           Your Placement Cell
         </h4>
       </div>
