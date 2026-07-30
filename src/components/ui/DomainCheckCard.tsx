@@ -115,8 +115,30 @@ export default function DomainCheckCard({ originalText }: DomainCheckCardProps) 
       });
   }, [originalText]);
 
-  // No email found in the text — don't render anything
-  if (noEmail) return null;
+  // No email found in the text — show a warning (absence of email IS a red flag)
+  if (noEmail) {
+    return (
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🌐</span>
+            <h3 className="text-lg font-semibold text-foreground">
+              Domain Legitimacy Check
+            </h3>
+          </div>
+          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-red-100 text-red-700">
+            🚨 No Email Found
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="mt-0.5 text-sm">❌</span>
+          <p className="text-sm text-foreground leading-relaxed">
+            <strong>No official email address was found in this offer.</strong> Legitimate companies always provide a corporate email (e.g. hr@company.com) in their offer communications. The absence of any email contact — especially when using WhatsApp or UPI only — is a significant red flag indicating this could be a scam.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Loading state
   if (loading) {
