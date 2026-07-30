@@ -402,6 +402,32 @@ export async function checkDomainLegitimacy(params: {
   const { domain, claimedCompany, senderEmail } = params;
 
   try {
+    // ── Known company whitelist — skip unreliable checks for verified domains ──
+    const knownDomain = KNOWN_COMPANY_DOMAINS.find(
+      (entry) => entry.domain.toLowerCase() === domain.toLowerCase().trim()
+    );
+    if (knownDomain) {
+      const emailBasics = checkEmailBasics(domain, senderEmail);
+      return {
+        domain,
+        claimedCompany,
+        senderDomainMatch: emailBasics.senderDomainMatch,
+        isFreeEmailProvider: emailBasics.isFreeEmailProvider,
+        domainAgeDays: null,
+        domainCreatedDate: null,
+        isTyposquat: false,
+        typosquatTarget: null,
+        hasMxRecords: true,
+        verdict: "legit",
+        reasons: [
+          `"${domain}" is the verified official domain of ${knownDomain.company}. This is a well-known, established company.`,
+          ...(emailBasics.senderDomainMatch
+            ? [`The sender's email matches the official ${knownDomain.company} domain — this is a good sign.`]
+            : [`Note: The sender's email (${emailBasics.senderDomain}) does not match ${domain}. Verify that the email is from an official ${knownDomain.company} address.`]),
+        ],
+      };
+    }
+
     // Run all checks — independent, so we can parallelize the async ones
     const emailBasics = checkEmailBasics(domain, senderEmail);
     const typosquatResult = checkTyposquat(domain);
