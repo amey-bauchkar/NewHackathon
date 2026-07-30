@@ -8,6 +8,7 @@ import VerificationChecklist from "@/components/ui/VerificationChecklist";
 import XRayTextView from "@/components/views/XRayTextView";
 import ComplaintDraftCard from "@/components/ui/ComplaintDraftCard";
 import PlacementCellBar from "@/components/ui/PlacementCellBar";
+import DomainCheckCard from "@/components/ui/DomainCheckCard";
 
 interface ResultsDashboardProps {
   result: AnalysisResult;
@@ -47,6 +48,9 @@ export default function ResultsDashboard({ result, originalText }: ResultsDashbo
           ))}
         </div>
       </div>
+
+      {/* Domain Legitimacy Check */}
+      <DomainCheckCard originalText={originalText} />
 
       {/* Verification Steps */}
       <VerificationChecklist steps={result.verificationSteps || []} />
