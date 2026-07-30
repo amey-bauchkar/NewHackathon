@@ -30,6 +30,21 @@ IMPORTANT RULES:
 - Write all descriptions in simple, student-friendly English.
 - Return ONLY valid JSON, no other text.
 
+Additionally, if and only if riskLevel is "high-risk", include two more fields in the JSON:
+
+"extractedEntities": {
+  "companyName": string (extract from text; if not found, use "Not specified"),
+  "contactEmail": string (if not found, use "Not specified"),
+  "contactPhone": string (if not found, use "Not specified"),
+  "amountRequested": string (if not found, use "Not specified"),
+  "dateReceived": string (use today's date if no date is in the text)
+},
+"complaintDraft": string — a formal 3-4 sentence complaint suitable for filing on the National Cyber Crime Reporting Portal (cybercrime.gov.in). Reference the specific suspicious phrases from the text as evidence. Write in first person ("I received...").
+
+If riskLevel is "safe" or "suspicious", omit both fields entirely — do not include them as null or empty strings.
+
+Return strictly valid JSON with no markdown code fences, no trailing commas, and no comments.
+
 Here is the offer text to analyze:
 `;
 
@@ -68,7 +83,7 @@ function sanitizeResult(raw: Record<string, unknown>): AnalysisResult {
   else if (riskScore <= 60) riskLevel = "suspicious";
   else riskLevel = "high-risk";
 
-  return {
+  const result: AnalysisResult = {
     riskScore,
     riskLevel,
     summary: typeof raw.summary === "string" ? raw.summary : "Analysis complete. Review the details below.",
@@ -90,10 +105,31 @@ function sanitizeResult(raw: Record<string, unknown>): AnalysisResult {
       ? raw.verificationSteps.map((s: unknown) => String(s))
       : ["Search the company name on Google and LinkedIn to verify it exists."],
   };
+
+  // ── Safely extract complaint fields (separate try/catch — never breaks core) ──
+  try {
+    if (riskLevel === "high-risk" && raw.extractedEntities && typeof raw.extractedEntities === "object") {
+      const ent = raw.extractedEntities as Record<string, unknown>;
+      result.extractedEntities = {
+        companyName: String(ent.companyName || "Not specified"),
+        contactEmail: String(ent.contactEmail || "Not specified"),
+        contactPhone: String(ent.contactPhone || "Not specified"),
+        amountRequested: String(ent.amountRequested || "Not specified"),
+        dateReceived: String(ent.dateReceived || "Not specified"),
+      };
+    }
+    if (riskLevel === "high-risk" && typeof raw.complaintDraft === "string" && raw.complaintDraft.length > 0) {
+      result.complaintDraft = raw.complaintDraft;
+    }
+  } catch (e) {
+    console.warn("Failed to parse complaint fields — skipping (non-fatal):", e);
+  }
+
+  return result;
 }
 
 // ── Groq (Primary) ─────────────────────────────────────────────
-async function callGroq(text: string): Promise<AnalysisResult> {
+async function callGroq(text: string): Promise<Record<string, unknown>> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) throw new Error("GROQ_API_KEY not set");
 
@@ -129,11 +165,11 @@ async function callGroq(text: string): Promise<AnalysisResult> {
   const content = data.choices[0]?.message?.content;
   if (!content) throw new Error("Empty response from Groq");
 
-  return JSON.parse(content) as AnalysisResult;
+  return JSON.parse(content) as Record<string, unknown>;
 }
 
 // ── Gemini (Fallback) ───────────────────────────────────────────
-async function callGemini(text: string): Promise<AnalysisResult> {
+async function callGemini(text: string): Promise<Record<string, unknown>> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY not set");
 
@@ -161,5 +197,5 @@ async function callGemini(text: string): Promise<AnalysisResult> {
   const content = data.candidates[0]?.content?.parts[0]?.text;
   if (!content) throw new Error("Empty response from Gemini");
 
-  return JSON.parse(content) as AnalysisResult;
+  return JSON.parse(content) as Record<string, unknown>;
 }

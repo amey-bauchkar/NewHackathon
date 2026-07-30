@@ -17,6 +17,14 @@ export interface AnalysisResult {
   highlights: HighlightedPhrase[];
   indicators: FraudIndicator[];
   verificationSteps: string[];
+  extractedEntities?: {
+    companyName: string;
+    contactEmail: string;
+    contactPhone: string;
+    amountRequested: string;
+    dateReceived: string;
+  };
+  complaintDraft?: string;
 }
 
 export interface MockOffer {
@@ -25,4 +33,12 @@ export interface MockOffer {
   preview: string;
   text: string;
   tag: "scam" | "suspicious" | "safe";
+  extractedEntities?: {
+    companyName: string;
+    contactEmail: string;
+    contactPhone: string;
+    amountRequested: string;
+    dateReceived: string;
+  };
+  complaintDraft?: string;
 }

@@ -28,6 +28,14 @@ Best regards,
 HR Team
 GlobalTech Solutions Pvt. Ltd.
 hr@globaltech-solutions.xyz`,
+    extractedEntities: {
+      companyName: "GlobalTech Solutions Pvt. Ltd.",
+      contactEmail: "hr@globaltech-solutions.xyz",
+      contactPhone: "Not specified",
+      amountRequested: "₹2,000 (refundable security deposit)",
+      dateReceived: new Date().toLocaleDateString("en-IN"),
+    },
+    complaintDraft: `I received an unsolicited internship offer via email from an entity calling itself "GlobalTech Solutions Pvt. Ltd." The message claims I was "selected without interview" and demands a ₹2,000 "refundable security deposit" via a suspicious payment link (pay.globaltech-solutions.xyz). The email uses urgency tactics stating "seats are limited" and threatens to release my slot within 24 hours. I believe this is a fraudulent scheme targeting students and request investigation.`,
   },
   {
     id: "scam-2",
@@ -54,6 +62,14 @@ Send payment to: UPI - digitalmarketingpro@ybl
 
 Contact: +91 98765 43210 (WhatsApp only)
 No calls please.`,
+    extractedEntities: {
+      companyName: "Digital Marketing Pro",
+      contactEmail: "Not specified",
+      contactPhone: "+91 98765 43210",
+      amountRequested: "₹500 (registration fee)",
+      dateReceived: new Date().toLocaleDateString("en-IN"),
+    },
+    complaintDraft: `I received an unsolicited job offer via WhatsApp from an entity calling itself "Digital Marketing Pro" (contact: +91 98765 43210, WhatsApp only). The message promises unrealistic earnings of ₹15,000–₹45,000 per month for just 2-3 hours of daily work with "no experience needed." It demands a ₹500 registration fee via UPI (digitalmarketingpro@ybl) and creates urgency by claiming only 50 candidates will be selected this week. I believe this is a fraudulent scheme and request investigation.`,
   },
   {
     id: "suspicious-1",

@@ -6,6 +6,7 @@ import RiskGauge from "@/components/ui/RiskGauge";
 import FraudIndicatorCard from "@/components/ui/FraudIndicatorCard";
 import VerificationChecklist from "@/components/ui/VerificationChecklist";
 import XRayTextView from "@/components/views/XRayTextView";
+import ComplaintDraftCard from "@/components/ui/ComplaintDraftCard";
 
 interface ResultsDashboardProps {
   result: AnalysisResult;
@@ -48,6 +49,17 @@ export default function ResultsDashboard({ result, originalText }: ResultsDashbo
 
       {/* Verification Steps */}
       <VerificationChecklist steps={result.verificationSteps || []} />
+
+      {/* Cybercrime Complaint Draft — only for high-risk */}
+      {result.riskLevel === "high-risk" && result.complaintDraft && result.extractedEntities && (
+        <ComplaintDraftCard
+          companyName={result.extractedEntities.companyName}
+          contactEmail={result.extractedEntities.contactEmail}
+          contactPhone={result.extractedEntities.contactPhone}
+          amountRequested={result.extractedEntities.amountRequested}
+          complaintDraft={result.complaintDraft}
+        />
+      )}
     </div>
   );
 }
