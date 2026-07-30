@@ -32,7 +32,7 @@ export default function ResultsDashboard({ result, originalText }: ResultsDashbo
           </div>
         </div>
         <div className="lg:col-span-2">
-          <XRayTextView originalText={originalText} highlights={result.highlights} />
+          <XRayTextView originalText={originalText} highlights={result.highlights || []} />
         </div>
       </div>
 
@@ -40,14 +40,14 @@ export default function ResultsDashboard({ result, originalText }: ResultsDashbo
       <div>
         <h3 className="text-lg font-semibold text-foreground mb-4">🚩 Fraud Indicators</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {result.indicators.map((indicator, index) => (
+          {(result.indicators || []).map((indicator, index) => (
             <FraudIndicatorCard key={index} indicator={indicator} />
           ))}
         </div>
       </div>
 
       {/* Verification Steps */}
-      <VerificationChecklist steps={result.verificationSteps} />
+      <VerificationChecklist steps={result.verificationSteps || []} />
     </div>
   );
 }
