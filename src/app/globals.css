@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff; /* Pure white background */
+  --foreground: #09090b; /* Jet black for text (Zinc 950) */
+  --muted: #71717a; /* Gray for subtext (Zinc 500) */
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --border: #e4e4e7; /* Soft gray border (Zinc 200) */
+  --primary: #09090b; /* Jet black buttons */
+  --primary-foreground: #ffffff; /* White text on black buttons */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), sans-serif;
+  letter-spacing: -0.02em; /* Tight letter spacing for that premium look */
+}
+
+
