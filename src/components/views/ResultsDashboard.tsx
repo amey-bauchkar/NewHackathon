@@ -7,6 +7,7 @@ import FraudIndicatorCard from "@/components/ui/FraudIndicatorCard";
 import VerificationChecklist from "@/components/ui/VerificationChecklist";
 import XRayTextView from "@/components/views/XRayTextView";
 import ComplaintDraftCard from "@/components/ui/ComplaintDraftCard";
+import PlacementCellBar from "@/components/ui/PlacementCellBar";
 
 interface ResultsDashboardProps {
   result: AnalysisResult;
@@ -60,6 +61,9 @@ export default function ResultsDashboard({ result, originalText }: ResultsDashbo
           complaintDraft={result.complaintDraft}
         />
       )}
+
+      {/* Placement Cell Contact — always shown regardless of risk level */}
+      <PlacementCellBar />
     </div>
   );
 }
